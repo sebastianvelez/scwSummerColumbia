@@ -1,0 +1,316 @@
+---
+title: 'Intro to R'
+author: "Juan Vélez"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: 
+  ioslides_presentation:
+    css: default2.css
+    widescreen: true
+---
+
+# Why learn R?
+
+
+## Advantages of using R
+
+1. Free
+2. Infinitely more intuitive and regular than Stata
+3. Can be used as a calculator
+4. You can have many objects in your environment
+6. Integrated version control
+5. Potential to understand better what you are doing
+5. Makes reproducible reasearch easy
+5. Huge community willing to help
+7. Kickass presentations like this one
+
+
+
+## Disadvantages
+
+1. First time getting clustered standard errors (2 or more way) might be tough
+3. Marginally slower than Stata for regressions with many fixed-effects
+
+
+# Interacting with R(-studio)
+
+## Basics
+
+- R is the program actually doing all the work
+- R-Studio is an interface to improve the experience  
+- R-Studio layout:  
+    - Interactive console (left)
+    - Environment/History (tabbed in upper right)
+    - Files/Plots/Packages/Help/Viewer (tabbed in lower right)
+
+- You can easily get Help by typing 1 or 2 interrogation marks in the console
+
+
+## R as calculator
+
+The simples thing you could do in R is arithmetic and logic
+
+```{r, results='asis'}
+100 + 4
+```
+
+If you type an incomplete statement, R will wait for you. The '+' sign indicates R is waiting for you.
+
+
+## R as calculator (II)
+
+When using R as calculator the order of operations is (highest to lowest precedence)
+
+- Parentheses: `(` `)`
+- Exponents: `^` or `**`
+- Divide: `/`
+- Multiply: `*`
+- Add: `+`
+- Subtract: `-`
+
+```{r, results='asis'}
+3 + 5 * 2
+(3 + 5) * 2
+```
+
+
+## R as calculator (III)
+
+- R expresses small numbers in scientific notation
+
+```{r, results='asis'}
+2/10000
+
+```
+
+- You can do it too
+
+```{r, results='asis'}
+5e3 # note the lack of minus sign here
+```
+
+
+- Math functions
+
+```{r, results='asis'}
+28%%6
+```
+
+
+## Comparing things
+
+R can also be used to compare things
+
+
+```{r, results='asis'}
+1 == 1 # note the double equal (is equal to)
+```
+
+```{r, results='asis'}
+1 != 2 # note the exclamation mark (is not equal to)
+```
+
+```{r, results='asis'}
+1 < 2 # less than
+```
+
+```{r, results='asis'}
+1 <= 2 # less than or equal
+```
+
+## Comparing things (II)
+
+```{r,results='asis'}
+4 > 2 #greater than
+
+```
+
+```{r,results='asis'}
+4 >= 4 #greater than or equa
+
+```
+
+<br>
+Some funny things
+
+```{r,results='asis'}
+'hola' > 4e100
+T > -5
+```
+
+
+## Variable assignment
+
+To store values, R prefers the operator `<-`
+
+```{r, results='asis'}
+y <- 1/4
+y
+```
+
+One nice feature of R: evaluations happens before assignment
+
+```{r, results='asis'}
+A <- 100
+A <- A+1
+A
+```
+
+## Vectorization
+
+R building block is the vector, for instance
+
+```{r, results='asis'}
+1:5
+2^(1:5)
+x <- 1:5
+2^x
+```
+
+## Managing your environment
+
+If you want a list of all the objects in your environment
+
+```{r, results as is}
+ls()
+```
+
+If you want to remove a variable
+
+```{r, results='asis'}
+rm(A)
+ls()
+```
+If you want to remove them all
+
+```{r}
+rm(list=ls())
+ls()
+```
+
+## R packages
+
+It is possible to add functions to R by writing or obtaining packages. You can
+
+- See installed packages by typing `installed.packages()`
+- Install packages by typing `install.packages("packagename")`, where `packagename` is the package name, in quotes.
+- Update installed packages by typing `update.packages()`
+- Remove a package with `remove.packages("packagename")`
+- Make a package available for use with `library(packagename)`
+
+
+## Challenges
+
+- What will be the value of each variable after each statement in the following program?
+```{r, results='asis'}
+mass <- 47.5
+age <- 122
+mass <- mass * 2.3
+age <- age - 20
+``` 
+- Run the code from the previous challenge, and write a command to compare mass to age. Is mass larger than age?
+- Clean up your working environment by deleting the mass and age variables.
+- Install the following packages: `ggplot2`, `dplyr`, `gapminder`
+
+
+# Creating a self contained project
+
+## A folder for the project
+
+1. Click the “File” menu button, then “New Project”.
+2. Click “New Directory”.
+3. Click “Empty Project”.
+4. Type in the name of the directory to store your project, e.g. “my_project”.
+6. Click the “Create Project” button.
+
+## Data to work later
+
+Download the Gapminder data from the link provided in the etherpad.
+
+- Download the file (CTRL + S, right mouse click -> “Save as”, or File -> “Save page as”)
+- Make sure it’s saved under the name `gapminder-FiveYearData.csv`
+- Save the file in your project folder.
+
+We will load and inspect these data later.
+
+
+
+## Finding help
+
+R, and every package, provide help files for functions
+
+```{r, eval=F}
+?function_name
+help(function_name)
+```
+To find help about special operators, quotes are required
+
+```{r, eval=F}
+?'%%'
+```
+
+Challenge: Look at the help for the c function. What kind of vector do you expect you will create if you evaluate the following:
+
+```{r, eval=F}
+c(1, 2, 3)
+c('d', 'e', 'f')
+c(1, 2, 'f')`
+```
+
+
+## Data types and structures
+
+R deals with numerous data types. The basic four are:
+
+- Decimals values like `4.5` are called numerics.  
+
+- Natural numbers like `4` are called integers. Integers are also numerics. 
+
+- Boolean values (`TRUE` or `FALSE`) are called logical.  
+
+- Text (or string) values are called characters.  
+
+
+
+## Going to Las Vegas (Challenge) {.smaller}
+
+- Assign the value `"Go!"` to the variable `vegas`
+
+- Create 2 vectors containing your winnings and loses from poker and roulette
+
+    -For `poker.vector`:
+    
+        - On Monday you won $140  
+        - Tuesday you lost $50  
+        - Wednesday you won $20  
+        - Thursday you lost $120  
+        - Friday you won $240 
+
+    -For `roulette.vector`:
+    
+        - On Monday you lost $24  
+        - Tuesday you lost $50  
+        - Wednesday you won $100  
+        - Thursday you lost $350  
+        - Friday you won $10  
+
+## Going to Las Vegas (Challenge) (II) {.smaller}
+
+Elements in vectors can be named
+
+```{r, eval=F}
+some.vector <- c("Pepito Perez", "Futbolista")
+names(some.vector) <- c("Nombre", "Profesión")
+```
+
+Following the example, name the elements of the roulette winnings
+```{r, eval=F}
+names(poker.vector) <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+names(roullete.vector) <- 
+```
+
+- Create a vector with the net winnings of each day. Name it `total.daily`
+- Create a named vector telling which days you made winnings. Name it `days.won`
+- Calculate the total winnings from the 5 days in Las Vegas. Name it `total.week`.
+
+
+
