@@ -92,7 +92,7 @@ When using R as calculator the order of operations is (highest to lowest precede
 - Math functions
 
 ```{r, results='asis'}
-28%%6
+28 %% 6
 ```
 
 
@@ -125,7 +125,7 @@ R can also be used to compare things
 ```
 
 ```{r,results='asis'}
-4 >= 4 #greater than or equa
+4 >= 4 #greater than or equal
 
 ```
 
@@ -257,7 +257,7 @@ c(1, 2, 'f')`
 ```
 
 
-## Data types and structures
+## Data types
 
 R deals with numerous data types. The basic four are:
 
@@ -268,6 +268,16 @@ R deals with numerous data types. The basic four are:
 - Boolean values (`TRUE` or `FALSE`) are called logical.  
 
 - Text (or string) values are called characters.  
+
+
+## Data structures
+
+R can handle many types of structures. We will focus on 
+
+- Vectors: have no dimension, all elements of the same type
+- Matrices: have dimension, all elements of the same type
+- Data frames: have dimensions, elements can be of different type as long as they are the same length
+- Lists: super flexible, you can put anything in a list
 
 
 
@@ -313,4 +323,55 @@ names(roullete.vector) <-
 - Calculate the total winnings from the 5 days in Las Vegas. Name it `total.week`.
 
 
+## Going to Las Vegas (III) {.smaller}
 
+Slicing in R is really simple: ff you want the first three elements of a vector just use '[]' and the apropriate indexes (from 1 to 3)
+
+```{r, eval = F}
+total.daily[1:3] # gets the daily wins from Mon-Wed
+
+```
+
+You can also perform operations and apply functions to parts of vectors
+
+```{r, eval=F}
+mean(total.daily) # gives the mean for the whole week
+mean(total.daily[4,5]) # gives the mean from Thu-Fri
+```
+
+
+## Matrices {.smaller}
+
+Think of matrices as vector with dimensions or a stack of vectors (of the same dimension)
+
+```{r}
+
+matrix(1:9, nrow = 3, ncol = 3)
+
+```
+
+By default the function 'matrix' fills out the blank matrix by column
+
+```{r}
+
+matrix(1:9, byrow = T, ncol = 3)
+```
+
+
+## Matrices challenge {.smaller}
+
+- The following vectors are the number of copies sold for 3 of Miles Davis' albums. 
+
+- The first number of each vector is the US sales and the second is the rest of the world.
+
+```{r, eval = F}
+kind.of.blue <- c(460.998, 314.4)
+sketches <- c(290.475, 247.900)
+miles.ahead <- c(309.306, 165.8)
+```
+
+- Combine these three vectors into one single vector called 'all.sales'.
+
+- Using the vector 'all.sales', create a matrix called 'miles.sales' that has US and rest of the world sales as columns.
+
+- Using help or google, label the columns and rows of the matrix properly.
