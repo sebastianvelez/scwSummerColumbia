@@ -375,3 +375,172 @@ miles.ahead <- c(309.306, 165.8)
 - Using the vector 'all.sales', create a matrix called 'miles.sales' that has US and rest of the world sales as columns.
 
 - Using help or google, label the columns and rows of the matrix properly.
+
+
+## Selection of matrix elements {.smaller}
+
+We can naturally slice a matrix by using the `[]` operator
+
+```{r, eval=F}
+some.matrix[3,6] # gets the element in the 3rd row and 6th column
+some.matrix[,6] # gets all the elements in the 6th column
+some.matrix[3,] # gets all the elements in the 3rd row
+```
+
+
+Challenge
+
+- Create a 50 by 20  matrix with the numbers from 1 to 1000 (the first column is the numbers from 1-50). Name it `my.matrix`
+- Extract the following matrix from `my.matrix`
+
+```{r, echo=F}
+my.matrix <- matrix(1:1000, nrow = 50, ncol = 20)
+ my.matrix[39:45, 1:4]
+```
+
+
+
+## Arithmetic with matrices (I) {.smaller}
+
+Just as vectors, the normal operators perform element-wise operations
+
+```{r}
+a <- matrix(5:8, nrow = 2, ncol = 2)
+b <- matrix(1:4, byrow = T, ncol = 2)
+c <- a * b
+```
+
+Scalars work the same way
+
+```{r}
+d <- matrix(1:9, nrow = 3)
+pi * d
+```
+
+
+## Arithmetic with matrices (II) {.smaller}
+
+If we want  to use standard matrix multiplication we need to use the operator `%*%`
+
+```{r}
+e <- matrix(1:6, nrow = 3, ncol = 2)
+f <- matrix(11:20, nrow = 2, ncol = 5)
+g <- e %*% f
+```
+
+
+For inverse we use the function `solve()`
+
+```{r}
+h <- matrix(rnorm(9), nrow = 3)
+h.inv <- solve(h)
+```
+
+for transpose the function `t()`
+
+```{r}
+i <- matrix(21:30, byrow = T, ncol = 2)
+j <- t(i)
+```
+
+
+## Functions and matrices
+
+Aplying functions to columns or rows is as easy as
+
+
+```{r}
+k <- matrix(rnorm(100), byrow = T, nrow = 10)
+
+column.mean <- mean(k[,1])
+row.mean <- mean(k[4,])
+
+```
+
+
+Challenge:
+
+- Calculate the mean and stadard deviation for Miles Davis' sales for US and non-US markets separately.
+
+
+## Factors {.smaller}
+
+Are the categorical variables in R. It is not just a name. They are treated particularly. They are extremely important for research in Economics.
+
+```{r}
+genre <- c('bebop', 'modal', 'cool', 'modal', 'cool', 'cool')
+genre <- factor(genre)
+```
+
+Some factors are naturally ordered (e.g days of the week) while some others aren't
+
+```{r}
+fruits <- c('Lulo', 'Guama', 'Carambolo', 'Papaya', 'Guama')
+fruits <- factor(fruits)
+
+temperatures <- c('High', 'Medium', 'High', 'High', 'Low', 'Low')
+temperatures <- factor(temperatures, ordered = T, levels = c('Low', 'Medium', 'High'))
+
+```
+
+And you can always change the name of your levels
+
+```{r}
+levels(temperatures) <- c('L', 'M', 'H')
+```
+
+
+
+## Data frames
+
+- This is the most typical data structure that economists work with. 
+- Data in data frames can be of numerous types (but same length)
+- A typical example is household surveys    
+    - name (`character`)
+    - age (`numeric`)
+    - married (`logical`)
+
+- Some ways of getting to know your DF
+```{r, eval=F}
+mtcars # pre-loaded data frame always available in R
+head(mtcars)
+tail(mtcars)
+str(mtcars)
+```
+
+
+## Creating dataframes 
+
+- Most of the time you will read a csv table to create DF.
+- Sometimes, though, you have to create them
+
+```{r}
+planets <- c("Mercury", "Venus", "Earth", "Mars", "Jupiter",
+             "Saturn", "Uranus", "Neptune")
+type <- c("Terrestrial", "Terrestrial", "Terrestrial", "Terrestrial", 
+          "Gas giant", "Gas giant", "Gas giant", "Gas giant")
+diameter <- c(0.382, 0.949, 1, 0.532, 11.209, 9.449, 4.007, 3.883)
+rotation <- c(58.64, -243.02, 1, 1.03, 0.41, 0.43, -0.72, 0.67)
+rings <- c(FALSE, FALSE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE)
+
+```
+
+- Challenge:
+    - Create a data frame with the previous vectors. Call it `planets.df`. 
+    - Use the function `str()` to analyze the structure of `planets.df`.
+
+## Slicing data frames
+
+- Similar to matrices, the `[]` can be used
+
+```{r, eval=F}
+df[1,2] # selects the first elemnt of column 2
+df[1:3, 2:8] # selects the first 3 elemnts of columns 2 to 8
+df[1,] # what would this select?
+```
+
+
+- Challenge:  
+    - Print out the value of the diameter of Mercury
+    - Print out all data on Mars
+
