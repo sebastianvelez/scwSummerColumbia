@@ -1,0 +1,162 @@
+---
+title: "Aprendiendo a 'tejer'"
+author: "Juan Vélez"
+date: "June 23, 2016"
+output: html_document
+---
+
+## Preludio
+
+Este es un documento Markdown. Markdown es una sintaxis sencilla que se usa para producir textos. [Stackedit](https://stackedit.io/) es una página  útil que permite ver lo que se esta escribiendo. Para más detalles sobre como R y Markdown interactúan, pueden visitar <http://rmarkdown.rstudio.com>.
+
+Cuando el documento esta listo, o parcialmente listo, pueden dar click en el botón *knit* y Rstudio compilará el resultado. Tanto el código de Markdown como los 'pedazos' de código en R se ejecutarán.
+
+
+
+```{r}
+print('Hola Mundo')
+i.was.born.in <- 1979
+this.year.is <- 2016
+my.age <- this.year.is - i.was.born.in
+print(paste('tengo', my.age, 'años de edad'))
+```
+
+Las opciones `echo=F` 
+
+
+```{r, echo=F}
+print('Hola Mundo')
+i.was.born.in <- 1979
+this.year.is <- 2016
+my.age <- this.year.is - i.was.born.in
+print(paste('tengo', my.age, 'años de edad'))
+```
+
+y `eval=F` pueden usarse.
+
+
+```{r, eval=F, results='asis'}
+print('Hola Mundo')
+i.was.born.in <- 1979
+this.year.is <- 2016
+my.age <- this.year.is - i.was.born.in
+print(paste('tengo', my.age, 'años de edad'))
+```
+
+
+
+Si uno quiere procesar datos o cargar librerías para usar mas adelante en el texto, no hay necesidad de mostrar los resultados. En ese caso `echo=F` es la opción indicada. 
+
+```{r global options, include=FALSE}
+library(ggplot2)
+library(dplyr)
+```
+
+## Ejemplos con Gapminder
+
+El siguiente gráfico muestra la relación entre PIB per  cápita y expectativa de vida.
+
+```{r}
+df <- read.csv('gapminder-FiveYearData.csv') # carga los datos
+df <- df[df$continent != 'Africa',]
+ggplot(data = df, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point()
+```
+
+La mínima expectativa de vida, `r min(df$lifeExp)` años, corresponde a `r  df$country[df$lifeExp == min(df$lifeExp)]`. Por otro lado, las mas alta expectativa de vida es de `r max(df$lifeExp)` for `r df$country[df$lifeExp == max(df$lifeExp)]`.
+
+
+Es importante notar que `ggplot` por si mismo no genera un gráfico, sino un espacio en el que trabajar:
+
+```{r}
+ggplot(data = df, aes(x = gdpPercap, y = lifeExp)) 
+```
+
+A menos que le demos una 'geometría', R no hace nada más. 
+
+
+```{r}
+ggplot(data = df, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(aes(colour = continent))
+```
+
+Se pueden añadir títulos y muchas cosas más
+
+```{r}
+ggplot(data = df, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(aes(colour = continent))+
+  ggtitle('Relación entre PIB per cápita y expectativa de vida')
+```
+
+como una línea de regresión
+
+```{r}
+ggplot(data = df, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(aes(colour = continent))+
+  ggtitle('Relación entre PIB per cápita y expectativa de vida') +
+  geom_smooth(method = "lm", se = TRUE)
+```
+
+tal vez mejor mirar la relacion entre el logaritmo del PIB y la expectativa de vida
+
+como una línea de regresión
+
+```{r}
+ggplot(data = df, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(aes(colour = continent)) + scale_x_log10() +
+  ggtitle('Relación entre PIB per cápita y expectativa de vida') +
+  geom_smooth(method = "lm", se = TRUE)
+```
+
+## Funciones y control de flujo
+
+En R, las funciones tienen la siguiente sintaxis
+
+```{r eval=F}
+function.name <- function(x){
+    some expresion
+  return(value)
+}
+```
+
+Para control de flujo, se usan expresiones como: 
+
+- `if`
+- `ifelse`
+- `for`
+- para saber mas, use `?control`
+
+
+### Un ejemplo
+
+Tenemos la siguiente información sobre 4 personas
+
+```{r}
+ppl.weight <- c(180,189.7,274.1,100.8)
+ppl.name <- c('JUAN', 'JEAN', 'SEAN', 'IVAN')
+ppl.year <- c(1979, 1985, 1992, 2001)
+
+```
+
+Queremos el peso en kilogramos y la edad en vez de el año. Podemos crear funciones:
+
+```{r}
+pound.to.kilo <- function (w.pound){
+  # this function takes a vector of weights in pounds
+  # and converts it to kilograms
+  w.kilo <- w.pound/2.20462
+  return(w.kilo)
+}
+
+
+year.to.age <- function(year){
+  # this function takes a year of birth 
+  # and returns age
+  current.year <- format(Sys.Date(), '%Y') %>%
+    as.numeric()
+  age <- current.year - year
+  return(age)
+  
+}
+```
+
