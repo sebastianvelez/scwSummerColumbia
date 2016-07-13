@@ -4,10 +4,7 @@ x <- runif(100,min = 10,max = 100)
 a <- log(sqrt(mean(x)))
 
 
-b <- x %>%
-  mean()%>%
-  sqrt() %>%
-  log()
+b <- x %>%   mean()%>%   sqrt() %>%   log()
 
 
 
@@ -16,8 +13,8 @@ my.mtcars <- mtcars
 
 
 
-# turn into factors
-my.mtcars$vs <- factor(my.mtcars$vs, levels = c('Does not have VS', 'Has VS'))
+  # turn into factors
+my.mtcars$vs <- factor(my.mtcars$vs)
 my.mtcars$cyl <- factor(my.mtcars$cyl)
 
 

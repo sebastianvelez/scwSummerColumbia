@@ -31,13 +31,13 @@ output:
 3. Marginally slower than Stata for regressions with many fixed-effects
 
 
-# Interacting with R(-studio)
+# Interacting with R(studio)
 
 ## Basics
 
 - R is the program actually doing all the work
-- R-Studio is an interface to improve the experience  
-- R-Studio layout:  
+- Rstudio is an interface to improve the experience  
+- Rstudio layout:  
     - Interactive console (left)
     - Environment/History (tabbed in upper right)
     - Files/Plots/Packages/Help/Viewer (tabbed in lower right)
@@ -174,7 +174,7 @@ If you want a list of all the objects in your environment
 ls()
 ```
 
-If you want to remove a variable
+If you want to remove an object
 
 ```{r, results='asis'}
 rm(A)
@@ -319,13 +319,13 @@ names(roullete.vector) <-
 ```
 
 - Create a vector with the net winnings of each day. Name it `total.daily`
-- Create a named vector telling which days you made winnings. Name it `days.won`
+- Create a named vector telling which days you won. Name it `days.won`
 - Calculate the total winnings from the 5 days in Las Vegas. Name it `total.week`.
 
 
 ## Going to Las Vegas (III) {.smaller}
 
-Slicing in R is really simple: ff you want the first three elements of a vector just use '[]' and the appropriate indexes (from 1 to 3)
+Slicing in R is really simple: if you want the first three elements of a vector just use '[]' and the appropriate indexes (from 1 to 3)
 
 ```{r, eval = F}
 total.daily[1:3] # gets the daily wins from Mon-Wed
@@ -557,10 +557,10 @@ planets.df[,'diameter']
 planets.df$diameter
 ```
 
-The last way is clearly less verbose. more concise.
+The last way is clearly less verbose; more concise.
 
 
-# Data frame: conditional selecting
+## Data frame: conditional selecting
 
 - Suppose we want to work only with planets that have rings. 
 
@@ -607,6 +607,7 @@ my.named.list <- list(some.matrix = b, some.df = planets.df, my.age = 36)
 - Using the function `read.csv()` read the csv file with the gapminder data.
 - This data is clean. It usually isn't.
 - load the libraries `dplyr` and `magrittr`
+
 > - Challenge: Describe the data frame (dimensions and data types)
 
 
@@ -621,7 +622,7 @@ my.named.list <- list(some.matrix = b, some.df = planets.df, my.age = 36)
     - `Select()` (and `rename()`)
     - `distinct()`
     - `mutate()` (and `transmute()`)
-    - `summarize`
+    - `summarize()`
     - `sample_n()` (and `sample_frac()`)
 
 
@@ -640,13 +641,14 @@ Do the following using the gapminder data
 - keep only data from 2007
 - Create a column with the gdp of each country (`mutate()`)
 - Group the data by continent (`group_by()`)
-- create a variable with the total population of the continent(call it `continent.pop`).
+- Create a variable with the total population of the continent(call it `continent.pop`).
 - Create a variable with the number of countries per continent (`n()`) call it `num.country`
 - Summarize the data frame at continent level (the result should have 4 continents and 4 variables)
 
 
+
 ```{r, echo=F, eval=F}
-df.gr <- df %>%
+df.gr2 <- df %>%
   filter(continent != 'Africa', country != 'Korea Dem. Rep.') %>%
   filter(year == '2007') %>%
   mutate(gdp.country = gdpPercap*pop) %>%

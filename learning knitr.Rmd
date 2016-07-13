@@ -1,16 +1,28 @@
 ---
 title: "Aprendiendo a 'tejer'"
 author: "Juan Vélez"
-date: "June 23, 2016"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output: html_document
 ---
 
 ## Preludio
 
+
+
 Este es un documento Markdown. Markdown es una sintaxis sencilla que se usa para producir textos. [Stackedit](https://stackedit.io/) es una página  útil que permite ver lo que se esta escribiendo. Para más detalles sobre como R y Markdown interactúan, pueden visitar <http://rmarkdown.rstudio.com>.
 
 Cuando el documento esta listo, o parcialmente listo, pueden dar click en el botón *knit* y Rstudio compilará el resultado. Tanto el código de Markdown como los 'pedazos' de código en R se ejecutarán.
 
+
+Incluir imágenes que estan en el directorio de trabajo es tan fácil como escribir el nombre de la imagen entre corchetes
+
+<center>
+
+![Foto de un gato](cutecat.jpg "No cualquier gato. El gato mas tierno del mundo")
+
+</center>
+
+---
 
 
 ```{r}
@@ -58,12 +70,13 @@ El siguiente gráfico muestra la relación entre PIB per  cápita y expectativa 
 
 ```{r}
 df <- read.csv('gapminder-FiveYearData.csv') # carga los datos
-df <- df[df$continent != 'Africa',]
+ df <- df[df$continent != 'Africa',]
+df <- df[df$country != 'Japan',]
 ggplot(data = df, aes(x = gdpPercap, y = lifeExp)) +
   geom_point()
 ```
 
-La mínima expectativa de vida, `r min(df$lifeExp)` años, corresponde a `r  df$country[df$lifeExp == min(df$lifeExp)]`. Por otro lado, las mas alta expectativa de vida es de `r max(df$lifeExp)` for `r df$country[df$lifeExp == max(df$lifeExp)]`.
+La mínima expectativa de vida, `r round(min(df$lifeExp), digits = 1)` años, corresponde a `r  df$country[df$lifeExp == min(df$lifeExp)]`. Por otro lado, las mas alta expectativa de vida es de `r round(max(df$lifeExp), digits = 1)` para `r df$country[df$lifeExp == max(df$lifeExp)]`.
 
 
 Es importante notar que `ggplot` por si mismo no genera un gráfico, sino un espacio en el que trabajar:
@@ -159,4 +172,72 @@ year.to.age <- function(year){
   
 }
 ```
+
+
+## Optimizando
+
+Si uno quisiera obtener los parametros  de $lifeExp_{it} = \alpha + \beta gdpPercap_{it}$ podria proceder de varias maneras:
+
+1. usar la función `lm`
+2. obtener los estimados via matrices
+3. minimizando la suma de errores al cuadrado
+
+
+### lm
+
+```{r }
+lm.out <- lm(log(lifeExp) ~ log(gdpPercap), data = df)
+lm.estimates <- lm.out$coefficients
+summary(lm.out)
+
+```
+
+
+### matrices
+
+
+```{r}
+ones <- rep(1, nrow(df))
+x <- data.matrix(data.frame(ones,log(df$gdpPercap)))
+y <- data.matrix(log(df$lifeExp))
+inv.xtx <- solve(t(x) %*% x )
+xty <- t(x) %*% y
+mat.betas <- inv.xtx %*% xty
+mat.betas
+```
+
+
+### minimizando
+
+En este caso hay que crear un a función que produzca la suma de errores al cuadrado, con $\alpha$ y $\beta$ como argumentos.
+
+```{r}
+
+sse <- function(beta){
+  
+  e = log(df$lifeExp) - beta[1] - beta[2] * log(df$gdpPercap)
+  sq.e = e^2
+  sum(sq.e)
+  
+}
+
+beta0 <- c(1,1)
+
+lm.optim <- optim(par =beta0 ,fn = sse, method = 'BFGS', control = list(maxit = 20000, abstol =  1e-12))
+
+
+lm.optim$par
+
+```
+
+
+
+### Comparacion
+| Method | Constant | GDP |
+| :----- | -------: | -----:|
+|lm (paquete)| `r round(lm.estimates[1], digits = 5)` |`r lm.estimates[2]` |
+| Fórmula| `r round(mat.betas[1], digits = 5)` | `r mat.betas[2]` |
+| Minimizando| `r round(lm.optim$par[1], digits = 5)` | `r lm.optim$par[2]`|
+
+
 
